@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.swing.text.html.Option;
+import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.Optional;
 
@@ -77,8 +78,11 @@ public class ThirdPartyUserService implements ThirdPartyUserServiceInterface {
                     String secondaryOwnerProvidedByThirdParty = transferThirdToCheckingDTO.getSecondaryOwner();
                     if(secondaryOwnerCheckingFromDB.equals(secondaryOwnerProvidedByThirdParty)){
                         Money transfer = transferThirdToCheckingDTO.getTransfer();
+                        if(transfer.getAmount().compareTo(new BigDecimal(0)) < 0){
+                            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The transfer amount needs to be more than 0");
+                        }
                         if(!transfer.getCurrency().equals(Currency.getInstance("USD"))){
-                            throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Transfer was not done. Only USD currency is accepted");
+                            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Transfer was not done. Only USD currency is accepted");
                         }
                         Money currentCheckingBalance = checkingFromDB.getBalance();
                         Money newBalance = new Money(currentCheckingBalance.increaseAmount(transfer));
@@ -98,8 +102,11 @@ public class ThirdPartyUserService implements ThirdPartyUserServiceInterface {
                 String primaryOwnerProvidedByThirdParty = transferThirdToCheckingDTO.getPrimaryOwner();
                 if (primaryOwnerOfCheckingFromDB.equals(primaryOwnerProvidedByThirdParty)) {
                     Money transfer = transferThirdToCheckingDTO.getTransfer();
+                    if(transfer.getAmount().compareTo(new BigDecimal(0)) < 0){
+                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The transfer amount needs to be more than 0");
+                    }
                     if(!transfer.getCurrency().equals(Currency.getInstance("USD"))){
-                        throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Transfer was not done. Only USD currency is accepted");
+                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Transfer was not done. Only USD currency is accepted");
                     }
                     Money currentCheckingBalance = checkingFromDB.getBalance();
                     Money newBalance = new Money(currentCheckingBalance.increaseAmount(transfer));
