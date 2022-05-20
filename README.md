@@ -6,7 +6,7 @@ It's an individual project where I applied the knowledge of Java and MySQL gaine
 
 ## Description
 
-The project consists backend code of a banking system. There are three type of users which ones are authenticated and authentified Bearer Auth.
+The project consists backend code of a banking system. There are three type of users which ones are authenticated and authorized Bearer Auth.
 
 There are different type of bank accounts such as student checking, checking, savings and credit cards.
 
