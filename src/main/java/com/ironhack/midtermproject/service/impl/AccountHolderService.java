@@ -47,6 +47,9 @@ public class AccountHolderService implements AccountHolderServiceInterface {
         Integer accountsId = transferCheckingToCheckingDTO.getAccountIdFrom();
         if(accountsList.contains(accountsId)){
             Money transferAmount = transferCheckingToCheckingDTO.getTransfer();
+            if(transferAmount.getAmount().compareTo(new BigDecimal(0)) < 0){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The transfer amount needs to be more than 0");
+            }
             if(!transferAmount.getCurrency().equals(Currency.getInstance("USD"))){
                 throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Transfer was not done. Only USD currency is accepted");
             }
@@ -92,6 +95,9 @@ public class AccountHolderService implements AccountHolderServiceInterface {
         Integer accountsId = transferCheckingToThirdDTO.getAccountIdFrom();
         if(accountsList.contains(accountsId)){
             Money transferAmount = transferCheckingToThirdDTO.getTransfer();
+            if(transferAmount.getAmount().compareTo(new BigDecimal(0)) < 0){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The transfer amount needs to be more than 0");
+            }
             //checking if currency is USD
             if(!transferAmount.getCurrency().equals(Currency.getInstance("USD"))){
                 throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Transfer was not done. Only USD currency is accepted");

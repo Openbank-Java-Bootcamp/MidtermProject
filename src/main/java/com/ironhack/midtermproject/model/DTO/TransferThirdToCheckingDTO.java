@@ -1,6 +1,7 @@
 package com.ironhack.midtermproject.model.DTO;
 
 import com.ironhack.midtermproject.model.accounts.Money;
+import jakarta.validation.constraints.Positive;
 
 public class TransferThirdToCheckingDTO {
 
@@ -13,6 +14,7 @@ public class TransferThirdToCheckingDTO {
     private String secondaryOwner;
 
     private String checkingSecretKey;
+
 
     private Money transfer;
 
