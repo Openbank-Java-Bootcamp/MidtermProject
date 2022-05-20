@@ -1,4 +1,4 @@
-# Ironhack Openbank Opencamp - Midterm project Java
+#  Midterm Java project in Ironhack Openbank Opencamp
 
 It's an individual project where I applied the knowledge of Java and MySQL gained during the first month of Ironhack Bootcamp.
 
