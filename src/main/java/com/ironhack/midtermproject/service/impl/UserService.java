@@ -1,13 +1,6 @@
 package com.ironhack.midtermproject.service.impl;
 
-import com.ironhack.midtermproject.controller.interf.UserControllerInterface;
-import com.ironhack.midtermproject.model.DTO.CheckingDTO;
 import com.ironhack.midtermproject.model.Role;
-import com.ironhack.midtermproject.model.accounts.Account;
-import com.ironhack.midtermproject.model.accounts.Checking;
-import com.ironhack.midtermproject.model.accounts.StudentChecking;
-import com.ironhack.midtermproject.model.users.AccountHolder;
-import com.ironhack.midtermproject.model.users.Admin;
 import com.ironhack.midtermproject.model.users.User;
 import com.ironhack.midtermproject.repository.AccountHolderRepository;
 import com.ironhack.midtermproject.repository.RoleRepository;
@@ -16,22 +9,16 @@ import com.ironhack.midtermproject.service.interf.UserServiceInterface;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

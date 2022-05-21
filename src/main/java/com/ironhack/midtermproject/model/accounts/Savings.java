@@ -21,12 +21,7 @@ public class Savings extends Account {
     @Embedded
     private Money minimumBalance;
 
-    @AttributeOverrides({
-            @AttributeOverride(name = "currency", column = @Column(name = "interest_rate_currency")),
-            @AttributeOverride(name = "amount", column = @Column(name = "interest_rate_amount"))
-    })
-    @Embedded
-    private Money interestRate;
+    private BigDecimal interestRate;
 
     private LocalDateTime lastInterestCheck;
 
@@ -34,14 +29,14 @@ public class Savings extends Account {
     public Savings(Money balance, String primaryOwner, String secondaryOwner, AccountHolder accountHolder) {
         super(balance, primaryOwner, secondaryOwner, accountHolder);
         this.minimumBalance = new Money(new BigDecimal(1000));
-        this.interestRate = new Money(new BigDecimal(0.0025));
+        this.interestRate = new BigDecimal(0.0025);
 
     }
 
 
 
     //Constructor without secondaryOwner
-    public Savings(Money balance, String primaryOwner, AccountHolder accountHolder, Money minimumBalance, Money interestRate) {
+    public Savings(Money balance, String primaryOwner, AccountHolder accountHolder, Money minimumBalance, BigDecimal interestRate) {
         super(balance, primaryOwner, accountHolder);
         this.minimumBalance = minimumBalance;
         this.interestRate = interestRate;
@@ -61,11 +56,11 @@ public class Savings extends Account {
         this.minimumBalance = minimumBalance;
     }
 
-    public Money getInterestRate() {
+    public BigDecimal getInterestRate() {
         return interestRate;
     }
 
-    public void setInterestRate(Money interestRate) {
+    public void setInterestRate(BigDecimal interestRate) {
         this.interestRate = interestRate;
     }
 

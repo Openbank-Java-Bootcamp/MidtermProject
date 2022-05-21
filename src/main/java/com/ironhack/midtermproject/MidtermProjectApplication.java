@@ -94,7 +94,7 @@ public class MidtermProjectApplication {
 				thirdPartyUserService.storeThirdPartyUser(new ThirdPartyUserDTO("Caty"));
 
 				//creating a Savings account
-				savingsService.storeSavings(new SavingsDTO(new Money(new BigDecimal(1500)), "James", new Money(new BigDecimal(300)), new Money(new BigDecimal(0.3)), 2));
+				savingsService.storeSavings(new SavingsDTO(new Money(new BigDecimal(1500)), "James", new Money(new BigDecimal(300)), new BigDecimal(0.3), 2));
 
 				//creating
 				creditCardService.storeCreditCard(new CreditCardDTO(new Money(new BigDecimal(1500)), "James", "Jess", 3, new Money(new BigDecimal(300)), new BigDecimal(0.15), LocalDate.now()));

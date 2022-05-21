@@ -17,14 +17,14 @@ public class SavingsDTO {
 
     private Money minimumBalance;
 
-    private Money interestRate;
+    private BigDecimal interestRate;
 
     @NotNull
     private Integer accountHolderId;
 
 
     //Constructor with secondary owner, minBalance and interestRate
-    public SavingsDTO(Money balance, String primaryOwner, String secondaryOwner, Money minimumBalance, Money interestRate, Integer accountHolderId) {
+    public SavingsDTO(Money balance, String primaryOwner, String secondaryOwner, Money minimumBalance, BigDecimal interestRate, Integer accountHolderId) {
         this.balance = balance;
         this.primaryOwner = primaryOwner;
         this.secondaryOwner = secondaryOwner;
@@ -34,7 +34,7 @@ public class SavingsDTO {
     }
 
     ////Constructor without secondary owner, but with minBalance and interestRate
-    public SavingsDTO(Money balance, String primaryOwner, Money minimumBalance, Money interestRate, Integer accountHolderId) {
+    public SavingsDTO(Money balance, String primaryOwner, Money minimumBalance, BigDecimal interestRate, Integer accountHolderId) {
         this.balance = balance;
         this.primaryOwner = primaryOwner;
         this.minimumBalance = minimumBalance;
@@ -84,11 +84,11 @@ public class SavingsDTO {
         this.minimumBalance = minimumBalance;
     }
 
-    public Money getInterestRate() {
+    public BigDecimal getInterestRate() {
         return interestRate;
     }
 
-    public void setInterestRate(Money interestRate) {
+    public void setInterestRate(BigDecimal interestRate) {
         this.interestRate = interestRate;
     }
 

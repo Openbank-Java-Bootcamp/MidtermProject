@@ -2,6 +2,7 @@ package com.ironhack.midtermproject.controller.impl;
 
 import com.ironhack.midtermproject.controller.interf.SavingsControllerInterface;
 import com.ironhack.midtermproject.service.interf.SavingsServiceInterface;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

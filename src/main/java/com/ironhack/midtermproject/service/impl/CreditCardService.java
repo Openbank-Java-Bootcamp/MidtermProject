@@ -19,6 +19,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Currency;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class CreditCardService implements CreditCardServiceInterface {
@@ -35,10 +38,18 @@ public class CreditCardService implements CreditCardServiceInterface {
         if(accountHolderRepository.findById(accountHolderId).isEmpty()){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The account holder was not found, the account could not be created");
         }
+        if(creditCardDTO.getBalance().getAmount().compareTo(new BigDecimal(0)) < 0){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The credit card was not created. The balance needs to be more than 0");
+        }
+        if(!creditCardDTO.getBalance().getCurrency().equals(Currency.getInstance("USD"))){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The account was not created. Only USD balance is accepted");
+        }
         CreditCard newCreditCard = new CreditCard();
         newCreditCard.setBalance(creditCardDTO.getBalance());
+        verifyName(creditCardDTO.getPrimaryOwner());
         newCreditCard.setPrimaryOwner(creditCardDTO.getPrimaryOwner());
         if(creditCardDTO.getSecondaryOwner() != null){
+            verifyName(creditCardDTO.getSecondaryOwner());
             newCreditCard.setSecondaryOwner(creditCardDTO.getSecondaryOwner());
         }
         newCreditCard.setAccountHolder1(accountHolderRepository.findById(accountHolderId).get());
@@ -52,9 +63,9 @@ public class CreditCardService implements CreditCardServiceInterface {
             newCreditCard.setCreditLimit(new Money(new BigDecimal(100)));
         }
         if (creditCardDTO.getInterestRate() == null){
-            newCreditCard.setInterestRate(new BigDecimal(0.2).setScale(2, RoundingMode.HALF_EVEN));
+            newCreditCard.setInterestRate(new BigDecimal(0.2).setScale(4, RoundingMode.HALF_EVEN));
         } else if (creditCardDTO.getInterestRate().compareTo(new BigDecimal(0.1)) > 0 && creditCardDTO.getInterestRate().compareTo(new BigDecimal(0.2)) < 0){
-            newCreditCard.setInterestRate(creditCardDTO.getInterestRate().setScale(2, RoundingMode.HALF_EVEN));
+            newCreditCard.setInterestRate(creditCardDTO.getInterestRate().setScale(4, RoundingMode.HALF_EVEN));
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The interest rate is either too small or too big");
         }
@@ -68,19 +79,37 @@ public class CreditCardService implements CreditCardServiceInterface {
         //checking if Savings account exists
         CreditCard creditCardFromDB = creditCardRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "CreditCard not found"));
         Money currentCreditCardBalance = creditCardFromDB.getBalance();
-        Money interestRate = new Money(creditCardFromDB.getInterestRate());
+        BigDecimal interestRate = creditCardFromDB.getInterestRate().setScale(1, RoundingMode.HALF_EVEN);
         LocalDateTime lastTimeChecked = creditCardFromDB.getLastInterestCheck();
         LocalDateTime lastTimeCheckedPlusOneMonth = lastTimeChecked.plusMonths((long) 1);
         LocalDateTime timeNow = LocalDateTime.now();
         //checking if one month already passed
         if(lastTimeCheckedPlusOneMonth.isBefore(timeNow)){
-            BigDecimal amountToAdd = currentCreditCardBalance.getAmount().multiply(interestRate.getAmount()).setScale(2, RoundingMode.HALF_EVEN);
-            Money newBalance = new Money(currentCreditCardBalance.increaseAmount(amountToAdd));
-            creditCardFromDB.setBalance(newBalance);
-            creditCardFromDB.setLastInterestCheck(timeNow);
-            creditCardRepository.save(creditCardFromDB);
+            if(interestRate.compareTo(new BigDecimal(0.1)) == 0){
+                BigDecimal amountToAdd = currentCreditCardBalance.getAmount().multiply(new BigDecimal(0.01));
+                Money newBalance = new Money(currentCreditCardBalance.increaseAmount(amountToAdd));
+                creditCardFromDB.setBalance(newBalance);
+                creditCardFromDB.setLastInterestCheck(timeNow);
+                creditCardRepository.save(creditCardFromDB);
+            } else {
+                BigDecimal amountToAdd = currentCreditCardBalance.getAmount().multiply(new BigDecimal(0.02));
+                Money newBalance = new Money(currentCreditCardBalance.increaseAmount(amountToAdd));
+                creditCardFromDB.setBalance(newBalance);
+                creditCardFromDB.setLastInterestCheck(timeNow);
+                creditCardRepository.save(creditCardFromDB);
+            }
         } else {
             throw new ResponseStatusException(HttpStatus.OK, "The balance was not upgraded because less than one month passed till the interest rate was added");
+        }
+    }
+
+    //for checking if primaryOwner and secondaryOwner names contain letters only when creating a credit card
+    public void verifyName(String name) {
+        String regx = "^[a-zA-Z][a-z ,.'-]+$";
+        Pattern pattern = Pattern.compile(regx,Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(name);
+        if(!matcher.find()) {
+            throw new IllegalArgumentException("Only letters and spaces allowed in primaryOwner and secondaryOwner field, please check the information you passed in these fields");
         }
     }
 
