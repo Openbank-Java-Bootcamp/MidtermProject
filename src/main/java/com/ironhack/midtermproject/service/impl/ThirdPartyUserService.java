@@ -19,6 +19,8 @@ import javax.swing.text.html.Option;
 import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class ThirdPartyUserService implements ThirdPartyUserServiceInterface {
@@ -32,6 +34,7 @@ public class ThirdPartyUserService implements ThirdPartyUserServiceInterface {
     //creating a new third party user
     public ThirdPartyUser storeThirdPartyUser(ThirdPartyUserDTO thirdPartyUserDTO){
         ThirdPartyUser newThirdPartyUser = new ThirdPartyUser();
+        verifyName(thirdPartyUserDTO.getName());
         newThirdPartyUser.setName(thirdPartyUserDTO.getName());
         newThirdPartyUser.setHashKey(generateHashKey().toString());
         return thirdPartyUserRepository.save(newThirdPartyUser);
@@ -56,6 +59,16 @@ public class ThirdPartyUserService implements ThirdPartyUserServiceInterface {
             throw new IllegalStateException(ex);
         }
         return hmacKey.getEncoded();
+    }
+
+    //for checking if name contains letters only when creating a third party user
+    public void verifyName(String name) {
+        String regx = "^[a-zA-Z][a-z ,.'-]+$";
+        Pattern pattern = Pattern.compile(regx,Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(name);
+        if(!matcher.find()) {
+            throw new IllegalArgumentException("Only letters and spaces allowed in name field, please check the information you passed in this field");
+        }
     }
 
     public void thirdPartyTransferToChecking(TransferThirdToCheckingDTO transferThirdToCheckingDTO){

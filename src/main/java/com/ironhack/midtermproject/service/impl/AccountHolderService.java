@@ -51,7 +51,7 @@ public class AccountHolderService implements AccountHolderServiceInterface {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The transfer amount needs to be more than 0");
             }
             if(!transferAmount.getCurrency().equals(Currency.getInstance("USD"))){
-                throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Transfer was not done. Only USD currency is accepted");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Transfer was not done. Only USD currency is accepted");
             }
             Money currentBalanceFrom = checkingFromDBFrom.getBalance();
             Money currentBalanceTo = checkingFromDBTo.getBalance();

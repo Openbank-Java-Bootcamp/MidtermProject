@@ -15,8 +15,12 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Currency;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class CheckingService implements CheckingServiceInterface {
@@ -30,11 +34,18 @@ public class CheckingService implements CheckingServiceInterface {
     //create new Checking account
     public Checking saveChecking(CheckingDTO checkingDTO){
         Integer accountHolderId = checkingDTO.getAccountHolderId();
+        if(checkingDTO.getBalance().getAmount().compareTo(new BigDecimal(0)) < 0){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The account was not created. The balance needs to be more than 0");
+        }
+        if(!checkingDTO.getBalance().getCurrency().equals(Currency.getInstance("USD"))){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The account was not created. Only USD balance is accepted");
+        }
+        verifyName(checkingDTO.getPrimaryOwner());
         Checking newChecking = new Checking();
         newChecking.setBalance(checkingDTO.getBalance());
-        System.out.println(checkingDTO.getBalance().getAmount());
         newChecking.setPrimaryOwner(checkingDTO.getPrimaryOwner());
         if(checkingDTO.getSecondaryOwner() != null){
+            verifyName(checkingDTO.getSecondaryOwner());
             newChecking.setSecondaryOwner(checkingDTO.getSecondaryOwner());
         }
         newChecking.setSecretKey(generateSecretKey().toString());
@@ -44,6 +55,16 @@ public class CheckingService implements CheckingServiceInterface {
         return checkingRepository.save(newChecking);
     }
 
+
+    //for checking if primaryOwner and secondaryOwner names contain letters only when creating a checking account
+    public void verifyName(String name) {
+        String regx = "^[a-zA-Z][a-z ,.'-]+$";
+        Pattern pattern = Pattern.compile(regx,Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(name);
+        if(!matcher.find()) {
+            throw new IllegalArgumentException("Only letters and spaces allowed in primaryOwner and secondaryOwner field, please check the information you passed in these fields");
+        }
+    }
 
     //for generating a SecretKey in saveChecking method
     public static byte[] generateSecretKey() {
