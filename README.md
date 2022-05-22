@@ -31,18 +31,18 @@ Controller, filter, model, repository, security, service
 
 | Method  | Route  | Description |
 | :------------ |:---------------| :-----|
-| GET     | /api/admins/balances | Display balances from all accounts |
-| GET      | /api/accountholders/balances       | Display balances corespondig to the logged in account holder |
-| POST | /api/admins/saveaccount    | Save account (student checking or checking) |
-| POST | /api/admins/savecreditcard  | Save credit card |
-| POST | /api/admins/savesavings        | Save savings account |
-| POST | /api/admins/savethirdpartyuser | Save Third Party User |
-| PATCH |/api/savings/{id} | Update savings balance annualy depending on interest rate |
-| PATCH | /api/creditcards/{id} | Update credit card balance monthly depending on interest rate |
-| PATCH | /api/accountholders/transfer       | Update balances after the transfer between checking accounts is made |
-| PATCH | /api/accountholders/transfer/thirdparty | Update balance after the transfer from checking to third party user is made |
-| PATCH | /api/thirdpartyusers/transfer    | Update balance after the transfer from third party user to checking is made |
-| DELETE | /api/admins/deletethirdparty/{id} | Delete a third party user |
+| GET     | /api/admins/balances | Display balances from all accounts (by authenticated admin) |
+| GET      | /api/accountholders/balances       | Display balances corespondig to the logged in account holder (by authenticated accountHolder)  |
+| POST | /api/admins/saveaccount    | Save account: student checking or checking depending on account holder age (by authenticated accountHolder) |
+| POST | /api/admins/savecreditcard  | Save credit card (by authenticated admin)|
+| POST | /api/admins/savesavings        | Save savings account (by authenticated admin) |
+| POST | /api/admins/savethirdpartyuser | Save Third Party User (by authenticated admin) |
+| PATCH |/api/savings/{id} | Update savings balance annualy depending on interest rate (by authenticated admin and account holder) |
+| PATCH | /api/creditcards/{id} | Update credit card balance monthly depending on interest rate (by authenticated admin and account holder) |
+| PATCH | /api/accountholders/transfer       | Update balances after the transfer between checking accounts is made (by authenticated account holder) |
+| PATCH | /api/accountholders/transfer/thirdparty | Update balance after the transfer from checking to third party user is made (by authenticated account holder) |
+| PATCH | /api/thirdpartyusers/transfer    | Update balance after the transfer from third party user to checking is made (by third party using secret key and hashkey as identification) |
+| DELETE | /api/admins/deletethirdparty/{id} | Delete a third party user (by authenticated admin) |
 
 ## Future Works
 
