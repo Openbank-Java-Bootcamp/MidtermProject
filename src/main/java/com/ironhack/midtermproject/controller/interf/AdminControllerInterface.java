@@ -25,5 +25,5 @@ public interface AdminControllerInterface {
 
     List<Object[]> getAllBalances();
 
-    void deleteAuthor(Integer id);
+    void deleteThird(Integer id);
 }

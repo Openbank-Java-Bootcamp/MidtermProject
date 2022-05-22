@@ -93,8 +93,8 @@ public class AdminController implements AdminControllerInterface {
 
     //delete ThirdPartyUser
     @DeleteMapping("/deletethirdparty/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAuthor(@PathVariable Integer id){
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteThird(@PathVariable Integer id){
         thirdPartyUserServiceInterface.deleteThirdPartyUser(id);
     }
 
