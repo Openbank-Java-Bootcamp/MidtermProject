@@ -13,7 +13,7 @@ There are different type of bank accounts such as student checking, checking, sa
 Depending on the account's role and the bank account type there are different methods available, such as:
 - transfering money in between accounts and to the third party users
 - updating balance depending on monthly and annual interest rate
-- creating new accounts
+- creating new accounts (student checking, checking, savings and credit cards)
      
 
 
