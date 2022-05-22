@@ -28,6 +28,10 @@ public class ThirdPartyUser {
         this.name = name;
     }
 
+    public ThirdPartyUser(String name) {
+        this.name = name;
+    }
+
     public ThirdPartyUser() {
     }
 
