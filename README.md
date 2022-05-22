@@ -44,6 +44,8 @@ Controller, filter, model, repository, security, service
 | PATCH | /api/thirdpartyusers/transfer    | Update balance after the transfer from third party user to checking is made (by third party using secret key and hashkey as identification) |
 | DELETE | /api/admins/deletethirdparty/{id} | Delete a third party user (by authenticated admin) |
 
+There are already pre created admins, account holders and third party users as well as student checking, checking, saving accounts and credit cards so you can try them out using Postman.
+
 ## Future Works
 
 It would be interesting to work on fraud detection method and front part of API.
