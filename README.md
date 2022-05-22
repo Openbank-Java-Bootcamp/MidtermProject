@@ -44,7 +44,7 @@ Controller, filter, model, repository, security, service
 | PATCH | /api/thirdpartyusers/transfer    | Update balance after the transfer from third party user to checking is made (by third party using secret key and hashkey as identification) |
 | DELETE | /api/admins/deletethirdparty/{id} | Delete a third party user (by authenticated admin) |
 
-There are already pre created admins, account holders and third party users as well as student checking, checking, saving accounts and credit cards so you can try them out using Postman. Here you have some templates ready for trying with the mentioned endpoints:
+There are already pre created admins, account holders and third party users as well as student checking, checking, saving accounts and credit cards so you can try the endpoints out using Postman. Also you have some templates bellow ready for trying with the mentioned endpoints:
 - for generating Admin access Token: http://localhost:8080/api/login?username=Laura&password=1234
 - for generating AccountHolder access Token: http://localhost:8080/api/login?username=Edita&password=1234
 - http://localhost:8080/api/admins/saveaccount - don't forget that this method is allowed only to Admins so a Token should be inserted and then this JSON format body: passed:
